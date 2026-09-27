@@ -30,7 +30,7 @@ public:
         if (bytes == 0 || bytes > data_.size()) return false;
         const std::size_t head = head_.load(std::memory_order_relaxed);
         const std::size_t tail = tail_.load(std::memory_order_acquire);
-        if (bytes > data_.size() - (tail - head)) return false;   // not enough space
+        if (bytes > data_.size() - (head - tail)) return false;   // not enough space
         std::size_t end = head + bytes;
         std::size_t where = head & mask_;
         std::size_t first = std::min(bytes, data_.size() - where);
