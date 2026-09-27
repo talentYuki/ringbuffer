@@ -1,0 +1,16 @@
+cmake_minimum_required(VERSION 3.14)
+project(ringbuffer VERSION 1.0.0 LANGUAGES CXX)
+
+add_library(ringbuffer INTERFACE)
+target_include_directories(ringbuffer INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_compile_features(ringbuffer INTERFACE cxx_std_17)
+find_package(Threads REQUIRED)
+target_link_libraries(ringbuffer INTERFACE Threads::Threads)
+
+option(RINGBUFFER_BUILD_TESTS "Build ringbuffer tests" ON)
+if(RINGBUFFER_BUILD_TESTS)
+  enable_testing()
+  add_executable(ringbuffer_tests tests/test_ring.cpp)
+  target_link_libraries(ringbuffer_tests PRIVATE ringbuffer)
+  add_test(NAME ringbuffer_tests COMMAND ringbuffer_tests)
+endif()
